@@ -34,52 +34,60 @@ class FlatTireProblem(BasePlanningProblem):
         super().__init__(initial, goal)
         self.actions_list = self.get_actions()
 
+
     def get_actions(self):
 
-        precond = [expr("At(Spare, Trunk)")]
-        precond_neg = []
+        # Remove(Spare, Trunk)
+        preconds = [expr("At(Spare, Trunk)")]
+        preconds_neg = []
         effects = [expr("At(Spare, Ground)")]
         effects_neg = [expr("At(Spare, Trunk)")]
-
         remove_spare_action = Action(expr("Remove(Spare, Trunk)"),
-            [precond, precond_neg],
+            [preconds, preconds_neg],
             [effects, effects_neg]
         )
 
+        # Remove(Flat, Axel)
         preconds = [expr("At(Flat, Axel)")]
-        preconds_neg = [expr("At(Flat, Axel)")]
-
+        preconds_neg = []
         effects = [expr("At(Flat, Ground)")]
         effects_neg = [expr("At(Flat, Axle)")]
-
-        remove_flat_action = Action(expr("Remove(Spare, Trunk)"),
-            [preconds, preconds_neg], [effects, effects_neg]
+        remove_flat_action = Action(expr("Remove(Flat, Axel)"),
+            [preconds, preconds_neg], 
+            [effects, effects_neg]
         )
 
+        # PutOn(Spare, Axle)
         preconds = [expr("At(Spare, Ground)")]
         preconds_neg = [expr("At(Flat, Axle)")]
         effects = [expr("At(Spare, Axle)")]
         effects_neg = [expr("At(Spare, Ground)")]
-
         put_on_action = Action(expr("PutOn(Spare, Axle)"),
-            [preconds, preconds_neg], [effects, effects_neg]
+            [preconds, preconds_neg], 
+            [effects, effects_neg]
         )
 
         return [remove_spare_action, remove_flat_action, put_on_action]
 
 
-def replace_tire():
+def change_tire():
     cakes = ['Cake']
     have_relations = make_relations('Have', cakes)
     eaten_relations = make_relations('Eaten', cakes)
     
     def get_init():
-        pos = have_relations
-        neg = eaten_relations
-        return FluentState(pos, neg)
+
+        init_pos = [
+            expr("At(Flat, Axle)"), 
+            expr("At(Spare, Trunk)")
+        ]
+
+        init_neg = []
+        
+        return FluentState(init_pos, init_neg)
 
     def get_goal():
-        return have_relations + eaten_relations
+        return ["At(Spare, Axle)"]
 
     return FlatTireProblem(get_init(), get_goal())
 
