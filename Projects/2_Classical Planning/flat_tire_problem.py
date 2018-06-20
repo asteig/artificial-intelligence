@@ -71,9 +71,6 @@ class FlatTireProblem(BasePlanningProblem):
 
 
 def change_tire():
-    cakes = ['Cake']
-    have_relations = make_relations('Have', cakes)
-    eaten_relations = make_relations('Eaten', cakes)
     
     def get_init():
 
