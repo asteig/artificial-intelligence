@@ -40,6 +40,7 @@ class FlatTireProblem(BasePlanningProblem):
         # Remove(Spare, Trunk)
         preconds = [expr("At(Spare, Trunk)")]
         preconds_neg = []
+
         effects = [expr("At(Spare, Ground)")]
         effects_neg = [expr("At(Spare, Trunk)")]
         remove_spare_action = Action(expr("Remove(Spare, Trunk)"),
@@ -47,12 +48,12 @@ class FlatTireProblem(BasePlanningProblem):
             [effects, effects_neg]
         )
 
-        # Remove(Flat, Axel)
-        preconds = [expr("At(Flat, Axel)")]
+        # Remove(Flat, Axle)
+        preconds = [expr("At(Flat, Axle)")]
         preconds_neg = []
         effects = [expr("At(Flat, Ground)")]
         effects_neg = [expr("At(Flat, Axle)")]
-        remove_flat_action = Action(expr("Remove(Flat, Axel)"),
+        remove_flat_action = Action(expr("Remove(Flat, Axle)"),
             [preconds, preconds_neg], 
             [effects, effects_neg]
         )
@@ -71,22 +72,23 @@ class FlatTireProblem(BasePlanningProblem):
 
 
 def change_tire():
-    
+
     def get_init():
 
         init_pos = [
-            expr("At(Flat, Axle)"), 
-            expr("At(Spare, Trunk)")
+            expr('At(Spare, Trunk)'), 
+            expr('At(Flat, Axle)')
         ]
 
         init_neg = []
-        
+
         return FluentState(init_pos, init_neg)
 
-    def get_goal():
-        return ["At(Spare, Axle)"]
+    def get_goal(): 
+        return [expr('At(Spare, Axle)')]
 
     return FlatTireProblem(get_init(), get_goal())
+    
 
 
 if __name__ == '__main__':
