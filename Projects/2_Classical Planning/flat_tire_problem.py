@@ -7,7 +7,7 @@ from aimacode.search import (
 from aimacode.utils import expr
 
 from _utils import (
-    FluentState, encode_state, make_relations, run_search
+    FluentState, encode_state, make_relations, run_search, create_expressions
 )
 from planning_problem import BasePlanningProblem
 
@@ -75,10 +75,7 @@ def change_tire():
 
     def get_init():
 
-        init_pos = [
-            expr('At(Spare, Trunk)'), 
-            expr('At(Flat, Axle)')
-        ]
+        init_pos = create_expressions(['At(Spare, Trunk)', 'At(Flat, Axle)'])
 
         init_neg = []
 
